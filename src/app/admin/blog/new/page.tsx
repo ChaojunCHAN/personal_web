@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 // 动态导入 TinyMCE 编辑器组件
 const Editor = dynamic(() => import('@tinymce/tinymce-react').then(mod => mod.Editor), {
   ssr: false,
-  loading: () => <p>加载编辑器中...</p>
+  loading: () => <p>Loading editor...</p>
 })
 
 export default function NewBlogPost() {
