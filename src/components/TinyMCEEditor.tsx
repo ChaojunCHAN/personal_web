@@ -1,8 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
-import { Settings } from 'tinymce';
+import { Editor as TinyMCEEditor, EditorOptions } from '@tinymce/tinymce-react';
 
 const DynamicTinyMCEEditor = dynamic(
   () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
@@ -13,7 +12,7 @@ interface EditorProps {
   value: string;
   onEditorChange: (content: string) => void;
   apiKey?: string;
-  init?: Settings;
+  init?: EditorOptions;
 }
 
 export default function Editor({
@@ -22,7 +21,7 @@ export default function Editor({
   apiKey,
   init,
 }: EditorProps) {
-  const defaultInit: Settings = {
+  const defaultInit: EditorOptions = {
     height: 500,
     menubar: false,
     plugins: ['lists', 'link', 'image', 'table'],
