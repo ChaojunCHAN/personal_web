@@ -1,22 +1,27 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { EditorOptions } from '@tinymce/tinymce-react';
+import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
 
 const DynamicTinyMCEEditor = dynamic(
-  () => import('@tinymce/tinymce-react').then((mod) => mod.Editor) as any,
+  () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
   { ssr: false }
 );
 
-interface TinyMCEEditorProps {
+interface EditorProps {
   value: string;
   onEditorChange: (content: string) => void;
   apiKey?: string;
-  init?: EditorOptions;
+  init?: any;
 }
 
-export default function TinyMCEEditor({ value, onEditorChange, apiKey, init }: TinyMCEEditorProps) {
-  const defaultInit: EditorOptions = {
+export default function Editor({
+  value,
+  onEditorChange,
+  apiKey,
+  init,
+}: EditorProps) {
+  const defaultInit: any = {
     height: 500,
     menubar: false,
     plugins: ['lists', 'link', 'image', 'table'],
@@ -26,14 +31,12 @@ export default function TinyMCEEditor({ value, onEditorChange, apiKey, init }: T
     content_css: 'dark',
   };
 
-  const mergedInit = init ? { ...defaultInit, ...init } : defaultInit;
-
   return (
     <DynamicTinyMCEEditor
       apiKey={apiKey || process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
       value={value}
       onEditorChange={onEditorChange}
-      init={mergedInit}
+      init={init ? { ...defaultInit, ...init } : defaultInit}
     />
   );
 } 
