@@ -1,6 +1,11 @@
 'use client';
 
-import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
+import dynamic from 'next/dynamic';
+
+const TinyMCEEditor = dynamic(
+  () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
+  { ssr: false }
+);
 
 interface EditorProps {
   value: string;
