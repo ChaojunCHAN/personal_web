@@ -3,8 +3,8 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 
 export const metadata: Metadata = {
-  title: "我的个人网站",
-  description: "个人博客和项目展示网站",
+  title: "陈超军的的个人网站",
+  description: "陈超军的的个人网站",
 };
 
 export default function RootLayout({
