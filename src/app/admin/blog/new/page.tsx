@@ -2,13 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import dynamic from 'next/dynamic'
-
-// 动态导入 TinyMCE 编辑器组件
-const Editor = dynamic(() => import('@/components/TinyMCEEditor'), {
-  ssr: false,
-  loading: () => <p>Loading editor...</p>
-})
 
 export default function NewBlogPost() {
   const router = useRouter()
@@ -16,22 +9,25 @@ export default function NewBlogPost() {
     title: '',
     content: '',
     excerpt: '',
-    date: new Date().toISOString().split('T')[0],
-    readTime: ''
+    publishedAt: '',
+    estimatedReadingTime: '',
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // 这里添加保存文章的逻辑
-    console.log('保存文章:', formData)
-    // 保存成功后返回文章列表
-    router.push('/admin/blog/list')
+    console.log('New Blog Post Data:', formData)
+    // Here you would typically send data to an API to save the post
+    router.push('/admin/blog') // Redirect back to blog list after submission
   }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-24">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-4xl font-bold mb-8">新建文章</h1>
+        <h1 className="text-4xl font-bold mb-8">新增博客文章</h1>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -41,9 +37,24 @@ export default function NewBlogPost() {
             <input
               type="text"
               id="title"
+              name="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleChange}
               className="input-field"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="content" className="form-label">
+              内容
+            </label>
+            <textarea
+              id="content"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              className="input-field h-64"
               required
             />
           </div>
@@ -54,71 +65,39 @@ export default function NewBlogPost() {
             </label>
             <textarea
               id="excerpt"
+              name="excerpt"
               value={formData.excerpt}
-              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+              onChange={handleChange}
               className="input-field"
-              rows={3}
-              required
             />
           </div>
 
           <div>
-            <label htmlFor="content" className="form-label">
-              内容
+            <label htmlFor="publishedAt" className="form-label">
+              发布日期
             </label>
-            <div className="prose prose-invert max-w-none">
-              <Editor
-                apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-                value={formData.content}
-                onEditorChange={(content) => setFormData({ ...formData, content })}
-                init={{
-                  height: 500,
-                  menubar: true,
-                  plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                  ],
-                  toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help',
-                  content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
-                  skin: 'oxide-dark',
-                  content_css: 'dark'
-                }}
-              />
-            </div>
+            <input
+              type="date"
+              id="publishedAt"
+              name="publishedAt"
+              value={formData.publishedAt}
+              onChange={handleChange}
+              className="input-field"
+            />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="date" className="form-label">
-                发布日期
-              </label>
-              <input
-                type="date"
-                id="date"
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="input-field"
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="readTime" className="form-label">
-                阅读时间（分钟）
-              </label>
-              <input
-                type="number"
-                id="readTime"
-                value={formData.readTime}
-                onChange={(e) => setFormData({ ...formData, readTime: e.target.value })}
-                className="input-field"
-                required
-              />
-            </div>
+          <div>
+            <label htmlFor="estimatedReadingTime" className="form-label">
+              预计阅读时间 (分钟)
+            </label>
+            <input
+              type="text"
+              id="estimatedReadingTime"
+              name="estimatedReadingTime"
+              value={formData.estimatedReadingTime}
+              onChange={handleChange}
+              className="input-field"
+            />
           </div>
 
           <div className="flex gap-4">
