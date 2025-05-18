@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
 // 动态导入 TinyMCE 编辑器组件
-const Editor = dynamic(() => import('@tinymce/tinymce-react').then(mod => mod.Editor), {
-  ssr: false,
-  loading: () => <p>Loading editor...</p>
-})
+const Editor = dynamic(
+  () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
+  {
+    ssr: false,
+    loading: () => <p>Loading editor...</p>
+  }
+) as any
 
 export default function NewBlogPost() {
   const router = useRouter()
