@@ -1,8 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
+import { Settings } from 'tinymce';
 
-const TinyMCEEditor = dynamic(
+const DynamicTinyMCEEditor = dynamic(
   () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
   { ssr: false }
 );
@@ -10,23 +12,32 @@ const TinyMCEEditor = dynamic(
 interface EditorProps {
   value: string;
   onEditorChange: (content: string) => void;
+  apiKey?: string;
+  init?: Settings;
 }
 
-export default function Editor({ value, onEditorChange }: EditorProps) {
+export default function Editor({
+  value,
+  onEditorChange,
+  apiKey,
+  init,
+}: EditorProps) {
+  const defaultInit: Settings = {
+    height: 500,
+    menubar: false,
+    plugins: ['lists', 'link', 'image', 'table'],
+    toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image',
+    content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+    skin: 'oxide-dark',
+    content_css: 'dark',
+  };
+
   return (
-    <TinyMCEEditor
-      apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+    <DynamicTinyMCEEditor
+      apiKey={apiKey || process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
       value={value}
       onEditorChange={onEditorChange}
-      init={{
-        height: 500,
-        menubar: false,
-        plugins: ['lists', 'link', 'image', 'table'],
-        toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
-        skin: 'oxide-dark',
-        content_css: 'dark',
-      }}
+      init={init ? { ...defaultInit, ...init } : defaultInit}
     />
   );
 } 

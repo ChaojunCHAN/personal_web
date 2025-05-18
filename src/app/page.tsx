@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-sm z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">陈超军的的个人网站</h1>
+            <h1 className="text-2xl font-bold">陈超军的个人网站</h1>
             <div className="space-x-6">
               <Link href="/" className="hover:text-blue-400 transition-colors">首页</Link>
               <Link href="/blog" className="hover:text-blue-400 transition-colors">博客</Link>
@@ -21,7 +21,7 @@ export default function Home() {
       {/* 主要内容 */}
       <div className="container mx-auto px-4 pt-32 pb-16">
         <section className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-6">欢迎来到我的个人空间</h2>
+          <h2 className="text-5xl font-bold mb-6">欢迎来到陈超军的个人空间</h2>
           <p className="text-xl text-gray-300 mb-8">
             这里是我分享技术、经验和想法的地方
           </p>
